@@ -6,15 +6,6 @@
     <title>伽奈维医疗 - 核心人才测评系统</title>
     <meta name="description" content="基于大五人格理论，助力企业精准识别核心人才，生成专业测评报告。">
     
-    <meta property="og:title" content="伽奈维医疗 | 核心人才测评">
-    <meta property="og:description" content="点击开启测评，生成你的专属人才画像报告。">
-    <meta property="og:image" content="https://cqhz52-byte.github.io/-/images/share-logo.png">
-    <meta property="og:url" content="https://cqhz52-byte.github.io/-/">
-    <meta property="og:type" content="website">
-
-    <meta itemprop="name" content="伽奈维医疗 - 核心人才测评">
-    <meta itemprop="description" content="专业人才素质测评系统，基于行为科学建模。">
-    <meta itemprop="image" content="https://cqhz52-byte.github.io/-/images/share-logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -51,7 +42,7 @@
 </head>
 <body class="text-gray-900 min-h-screen flex flex-col no-scrollbar">
 
-    <header id="top-header" class="bg-blue-800 text-white shadow-md p-4 flex justify-between items-center sticky top-0 z-50">
+    <header id="top-header" class="bg-blue-800 text-white shadow-md p-4 flex justify-between items-center sticky top-0 z-40">
         <h1 class="text-lg md:text-xl font-bold tracking-wider">伽奈维医疗 | 核心人才测评</h1>
         <div id="user-info-display" class="hidden text-xs md:text-sm font-medium bg-blue-900 px-3 py-1 rounded-full"></div>
     </header>
@@ -67,12 +58,9 @@
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">所属部门</label>
                     <select id="input-dept" class="w-full border p-3 rounded outline-none">
-                        <option value="研发部">研发部</option>
-                        <option value="财务部">财务部</option>
-                        <option value="人事部">人事部</option>
-                        <option value="采购部">采购部</option>
-                        <option value="市场/销售部">市场/销售部</option>
-                        <option value="管理层">管理层</option>
+                        <option value="研发部">研发部</option><option value="财务部">财务部</option>
+                        <option value="人事部">人事部</option><option value="采购部">采购部</option>
+                        <option value="市场/销售部">市场/销售部</option><option value="管理层">管理层</option>
                         <option value="其他部门">其他部门</option>
                     </select>
                 </div>
@@ -83,16 +71,13 @@
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">学历</label>
                     <select id="input-edu" class="w-full border p-3 rounded outline-none">
-                        <option value="大学专科">大学专科</option><option value="大学本科" selected>大学本科</option><option value="硕士研究生">硕士研究生</option><option value="博士及以上">博士及以上</option>
+                        <option value="大学专科">大学专科</option><option value="大学本科" selected>大学本科</option>
+                        <option value="硕士研究生">硕士研究生</option><option value="博士及以上">博士及以上</option>
                     </select>
                 </div>
-               <div>
+                <div>
                     <label class="block text-sm font-bold text-blue-800 mb-1">测评邀请码 <span class="text-red-500">*</span></label>
-                    <input type="tel" 
-                        id="input-code" 
-                         maxlength="4" 
-                        class="w-full border p-3 rounded outline-none border-blue-300 focus:border-blue-600 text-center tracking-[1em] text-2xl font-bold bg-blue-50 placeholder:text-sm placeholder:tracking-normal placeholder:font-normal" 
-                         placeholder="请输入4位数字码">
+                    <input type="tel" id="input-code" maxlength="4" class="w-full border p-3 rounded outline-none border-blue-300 focus:border-blue-600 text-center tracking-[1em] text-2xl font-bold bg-blue-50 placeholder:text-sm placeholder:tracking-normal placeholder:font-normal" placeholder="请输入4位数字码">
                 </div>
                 
                 <button id="btn-start" onclick="startTest()" class="w-full bg-blue-700 text-white p-3 rounded font-bold text-lg hover:bg-blue-800 mt-6 shadow transition-all">开始测评</button>
@@ -119,7 +104,7 @@
                 </button>
             </div>
 
-            <div id="report-wrapper" style="width: 794px; margin: 0 auto; position: relative; transform-origin: top center;">
+            <div id="report-wrapper" style="width: 794px; position: relative;">
                 <div id="pdf-page-1" class="pdf-page">
                     <div class="border-b-2 border-blue-900 pb-2 mb-4 flex justify-between items-end">
                         <div>
@@ -127,7 +112,7 @@
                             <p class="text-gray-600 font-medium text-xs" id="report-user-sub"></p>
                         </div>
                         <div class="text-right">
-                            <p class="text-[10px] text-gray-500 mb-1" id="report-stats">有效作答时间: 计算中... | 过快应答率: 计算中...</p>
+                            <p class="text-[10px] text-gray-500 mb-1" id="report-stats">作答时间: 计算中... | 过快应答率: 计算中...</p>
                             <p class="font-bold text-blue-900 text-lg leading-tight">伽奈维医疗</p>
                             <p id="report-validity" class="text-xs font-bold mt-1">【报告状态生成中...】</p>
                         </div>
@@ -158,7 +143,28 @@
         </div>
     </main>
 
+    <div id="custom-alert" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-[85%] w-80 text-center transform transition-transform">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2" id="alert-title">系统提示</h3>
+            <p class="text-sm text-gray-500 mb-6" id="alert-message">内容</p>
+            <button onclick="closeAlert()" class="w-full inline-flex justify-center rounded-xl border border-transparent bg-blue-600 px-4 py-3 text-base font-bold text-white shadow-sm hover:bg-blue-700 focus:outline-none">我知道了</button>
+        </div>
+    </div>
+
     <script>
+        // --- 自定义弹窗控制逻辑 ---
+        function showAlert(msg, title = "提示") {
+            document.getElementById('alert-message').innerText = msg;
+            document.getElementById('alert-title').innerText = title;
+            document.getElementById('custom-alert').classList.remove('hidden');
+        }
+        function closeAlert() {
+            document.getElementById('custom-alert').classList.add('hidden');
+        }
+
         window.onload = function() {
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             if (isMobile) {
@@ -208,7 +214,8 @@
             '主动性': { low: '安于现状，不愿主动承担额外工作', high: '主动应对新挑战，自愿承担职责，采取行动' },
             '关注细节': { low: '对全局更为关心，不会过分沉溺于细节', high: '关注细节问题，很少有重要细节被忽略' }
         };
-
+        
+        // 展开的题库数据 (67题)
         const questionsData = [
             { id: 1, options: [{id: 'A', text: '即使很生气，我也不会表露出来', trait: '情绪控制'}, {id: 'B', text: '受到批评不会让我的情绪产生太大波动', trait: '抗压性'}, {id: 'C', text: '我会反复确认细节问题', trait: '关注细节'}] },
             { id: 2, options: [{id: 'A', text: '我总能快速做出调整，以应对外部环境变化', trait: '适应性'}, {id: 'B', text: '我喜欢琢磨事物的规律', trait: '分析思维'}, {id: 'C', text: '我总是很快从挫折中恢复过来', trait: '坚韧性'}] },
@@ -296,15 +303,8 @@
         const CACHE_KEY = 'talents_assessment_progress';
 
         ALL_TRAITS.forEach(trait => { rawScoreMap[trait] = 0; maxRawMap[trait] = 0; });
-        questionsData.forEach(q => {
-            q.options.forEach(opt => {
-                if(maxRawMap[opt.trait] !== undefined) maxRawMap[opt.trait] += 2; 
-            });
-        });
+        questionsData.forEach(q => { q.options.forEach(opt => { if(maxRawMap[opt.trait] !== undefined) maxRawMap[opt.trait] += 2; }); });
 
-        // -------------------------
-        // 本地缓存管理
-        // -------------------------
         function saveProgress() {
             const state = { userInfo, currentQIndex, step, currentOptions, rawScoreMap, testStartTime, fastAnswerCount, currentBlock };
             localStorage.setItem(CACHE_KEY, JSON.stringify(state));
@@ -335,10 +335,7 @@
                         document.getElementById('view-quiz').classList.remove('hidden');
                         renderQuestion(true);
                     }
-                } catch(e) {
-                    console.error("缓存加载失败，已重置", e);
-                    localStorage.removeItem(CACHE_KEY);
-                }
+                } catch(e) { localStorage.removeItem(CACHE_KEY); }
             }
         }
 
@@ -356,129 +353,11 @@
             }
         }
 
-        // -------------------------
-        // 调试通道 (通过快捷键调用)
-        // -------------------------
-        function quickDebug() {
-            document.getElementById('input-name').value = "陈枭";
-            document.getElementById('input-age').value = "35";
-            document.getElementById('input-dept').value = "研发部";
-            userInfo = { name: "陈枭", gender: "男", age: "35", dept: "研发部", edu: "大学本科" };
-            
-            document.getElementById('user-info-display').innerText = `陈枭 | 研发部`;
-            document.getElementById('user-info-display').classList.remove('hidden');
-            document.getElementById('view-intro').classList.add('hidden');
-            
-            testStartTime = Date.now() - (24 * 60000);
-            fastAnswerCount = 0;
-            
-            ALL_TRAITS.forEach(trait => { rawScoreMap[trait] = 0; });
-
-            const chenXiaoAnswers = [
-                [2, 1], [1, 0], [0, 1], [2, 1], [1, 2], [1, 0], [0, 2], [2, 0], [1, 2], [2, 1],
-                [0, 2], [2, 0], [0, 2], [1, 0], [0, 2], [0, 1], [2, 0], [0, 2], [0, 1], [0, 2],
-                [0, 2], [1, 2], [1, 0], [2, 0], [0, 1], [2, 0], [1, 2], [2, 1], [1, 0], [0, 2],
-                [1, 2], [0, 2], [2, 0], [1, 0], [2, 0], [1, 0], [0, 2], [0, 1], [2, 1], [2, 1],
-                [2, 0], [1, 2], [0, 1], [0, 2], [1, 0], [0, 2], [0, 1], [0, 2], [1, 2], [2, 1],
-                [2, 0], [2, 1], [0, 1], [1, 0], [2, 1], [0, 1], [1, 2], [0, 2], [2, 0], [0, 2],
-                [2, 0], [2, 1], [0, 1], [0, 1], [2, 0], [2, 0], [0, 2]
-            ];
-
-            questionsData.forEach((q, index) => {
-                let mostIndex = chenXiaoAnswers[index][0];
-                let nextIndex = chenXiaoAnswers[index][1];
-                let leastIndex = [0, 1, 2].find(i => i !== mostIndex && i !== nextIndex);
-                let most = q.options[mostIndex], next = q.options[nextIndex], least = q.options[leastIndex];
-
-                [most, next, least].forEach((opt, i) => {
-                    let isNeg = checkNegative(opt.text);
-                    let rawVal = (i === 0) ? 2 : ((i === 1) ? 1 : 0);
-                    let finalVal = isNeg ? (2 - rawVal) : rawVal;
-                    if(rawScoreMap[opt.trait] !== undefined) rawScoreMap[opt.trait] += finalVal;
-                });
-            });
-            currentQIndex = 67; 
-            calculateFinalScores(); 
-            generateReport();
-        }
-
-        function quickDebugHuYingzhong() {
-            document.getElementById('input-name').value = "胡应中";
-            document.getElementById('input-age').value = "28";
-            document.getElementById('input-dept').value = "市场/销售部";
-            userInfo = { name: "胡应中", gender: "男", age: "28", dept: "市场/销售部", edu: "大学本科" };
-            
-            document.getElementById('user-info-display').innerText = `胡应中 | 市场/销售部`;
-            document.getElementById('user-info-display').classList.remove('hidden');
-            document.getElementById('view-intro').classList.add('hidden');
-            
-            testStartTime = Date.now() - (15 * 60000); 
-            fastAnswerCount = 2;
-            
-            ALL_TRAITS.forEach(trait => { rawScoreMap[trait] = 0; });
-            
-            const huAnswers = [
-                [0, 1], [0, 2], [1, 2], [0, 1], [0, 2], [0, 2], [2, 1], [0, 1], [0, 2], [0, 1],
-                [1, 0], [0, 2], [1, 2], [1, 0], [0, 1], [2, 0], [2, 1], [0, 1], [1, 0], [1, 2],
-                [0, 2], [2, 1], [1, 2], [1, 2], [2, 0], [0, 1], [2, 1], [2, 0], [1, 0], [2, 1],
-                [0, 2], [0, 2], [1, 2], [0, 2], [1, 0], [1, 0], [0, 2], [2, 0], [0, 1], [0, 1],
-                [2, 1], [0, 1], [2, 0], [1, 2], [1, 0], [2, 1], [2, 0], [1, 0], [2, 1], [1, 0],
-                [1, 0], [1, 2], [2, 1], [2, 0], [0, 1], [1, 0], [0, 1], [0, 2], [0, 2], [1, 0],
-                [2, 1], [1, 0], [2, 1], [2, 1], [0, 1], [1, 0], [2, 1]
-            ];
-
-            questionsData.forEach((q, index) => {
-                let mostIndex = huAnswers[index][0];
-                let nextIndex = huAnswers[index][1];
-                let leastIndex = [0, 1, 2].find(i => i !== mostIndex && i !== nextIndex);
-                let most = q.options[mostIndex], next = q.options[nextIndex], least = q.options[leastIndex];
-
-                [most, next, least].forEach((opt, i) => {
-                    let isNeg = checkNegative(opt.text);
-                    let rawVal = (i === 0) ? 2 : ((i === 1) ? 1 : 0);
-                    let finalVal = isNeg ? (2 - rawVal) : rawVal;
-                    if(rawScoreMap[opt.trait] !== undefined) rawScoreMap[opt.trait] += finalVal;
-                });
-            });
-            currentQIndex = 67; calculateFinalScores(); generateReport();
-        }
-
-        // ==========================================
-        // 隐藏的快捷键测试入口 (Alt+Q / Alt+W)
-        // ==========================================
-        document.addEventListener('keydown', function(event) {
-            if (event.altKey) {
-                const key = event.key.toLowerCase(); 
-                if (key === 'q') {
-                    event.preventDefault(); 
-                    console.log("🛠️ 触发快捷键 Alt+Q: 加载[陈枭]模拟数据...");
-                    if (typeof quickDebug === 'function') quickDebug();
-                } 
-                else if (key === 'w') {
-                    event.preventDefault(); 
-                    console.log("🛠️ 触发快捷键 Alt+W: 加载[胡应中]模拟数据...");
-                    if (typeof quickDebugHuYingzhong === 'function') quickDebugHuYingzhong();
-                }
-            }
-        });
-
-        // -------------------------
-        // 判定反向题
-        // -------------------------
         function checkNegative(text) {
-            const negatives = [
-                '无法在规定时间内完成工作', '我会感到焦虑', '让我感到筋疲力尽', '我容易发怒', 
-                '我常感到没有把握', '在集体活动中，我常感到不自在', '我很难保持冷静', 
-                '我经常感到紧张不安', '我不喜欢在工作上追求细节', '我不喜欢工作内容经常变换', 
-                '是一件很难的事情', '我需要很长时间适应', '我更愿意待在家里', 
-                '我更喜欢在别人的指导下', '中断自己的计划', '我常自我怀疑', '我不愿意指挥他人' 
-            ];
+            const negatives = ['无法在规定时间内完成工作','我会感到焦虑','让我感到筋疲力尽','我容易发怒','我常感到没有把握','在集体活动中，我常感到不自在','我很难保持冷静','我经常感到紧张不安','我不喜欢在工作上追求细节','我不喜欢工作内容经常变换','是一件很难的事情','我需要很长时间适应','我更愿意待在家里','我更喜欢在别人的指导下','中断自己的计划','我常自我怀疑','我不愿意指挥他人'];
             return negatives.some(neg => text.includes(neg));
         }
 
-        // -------------------------
-        // 作答流程 (已接入阿里云鉴权)
-        // -------------------------
         async function startTest() {
             const name = document.getElementById('input-name').value;
             const gender = document.getElementById('input-gender').value;
@@ -487,8 +366,8 @@
             const code = document.getElementById('input-code').value.trim();
             const btn = document.getElementById('btn-start');
 
-            if(!name || !age) { alert('请填写完整个人信息'); return; }
-            if(!code) { alert('请输入测评邀请码'); return; }
+            if(!name || !age) { showAlert('请填写完整个人信息', '验证失败'); return; }
+            if(!code) { showAlert('请输入测评邀请码', '验证失败'); return; }
 
             try {
                 btn.innerText = "⏳ 身份验证中...";
@@ -513,12 +392,12 @@
                     testStartTime = Date.now(); lastClickTime = Date.now(); 
                     saveProgress(); renderQuestion();
                 } else {
-                    alert(result.message || "邀请码无效，请联系HR！");
+                    showAlert(result.message || "邀请码无效，请联系HR！", "验证失败");
                     btn.innerText = "开始测评";
                     btn.disabled = false;
                 }
             } catch (err) {
-                alert("鉴权服务器连接失败，请检查网络或公网地址设置");
+                showAlert("服务器连接失败，请检查网络或配置", "网络异常");
                 btn.innerText = "开始测评";
                 btn.disabled = false;
             }
@@ -566,62 +445,39 @@
                 currentOptions = currentOptions.filter(o => o.id !== selectedOpt.id);
                 step = 2; saveProgress(); renderQuestion();
             } else {
-                let most = currentBlock.most;
-                let next = selectedOpt;
-                let least = currentOptions.find(o => o.id !== selectedOpt.id);
-                
+                let most = currentBlock.most; let next = selectedOpt; let least = currentOptions.find(o => o.id !== selectedOpt.id);
                 [most, next, least].forEach((opt, index) => {
                     let isNeg = checkNegative(opt.text);
                     let rawVal = (index === 0) ? 2 : ((index === 1) ? 1 : 0);
                     let finalVal = isNeg ? (2 - rawVal) : rawVal;
                     if(rawScoreMap[opt.trait] !== undefined) rawScoreMap[opt.trait] += finalVal;
                 });
-
                 step = 1; currentQIndex++; currentBlock = { most: null }; 
                 saveProgress(); renderQuestion();
             }
         }
 
-        // -------------------------
-        // 核心计分算法
-        // -------------------------
         function calculateFinalScores() {
             let totalRatio = 0, validTraitsCount = 0;
-            ALL_TRAITS.forEach(trait => {
-                let max = maxRawMap[trait] || 0;
-                if(max > 0) { totalRatio += (rawScoreMap[trait] / max); validTraitsCount++; }
-            });
+            ALL_TRAITS.forEach(trait => { let max = maxRawMap[trait] || 0; if(max > 0) { totalRatio += (rawScoreMap[trait] / max); validTraitsCount++; } });
             const baseline = validTraitsCount > 0 ? (totalRatio / validTraitsCount) : 0.5;
 
-            const TRAIT_NORM_ADJUST = {
-                '平和度': -0.8, '自信度': 0.2, '情绪控制': -1.6, '抗压性': -1.8, '乐群性': 0, '活力性': -1.8,
-                '主导支配': 0.2, '影响性': 0.3, '同理心': -1.9, '合作性': -1.7, '谦虚性': -0.6, '利他性': -2.9,
-                '好奇心': -0.6, '分析思维': -1.3, '概念思维': 1.3, '创造思维': 0, '适应性': 0.0, '独立性': -1.3,
-                '条理性': -0.9, '自律性': 3.1, '可靠性': -2.1, '成就动机': 0.5, '坚韧性': 0.8, '主动性': -0.6, '关注细节': -0.3
-            };
+            const TRAIT_NORM_ADJUST = {'平和度':-0.8,'自信度':0.2,'情绪控制':-1.6,'抗压性':-1.8,'乐群性':0,'活力性':-1.8,'主导支配':0.2,'影响性':0.3,'同理心':-1.9,'合作性':-1.7,'谦虚性':-0.6,'利他性':-2.9,'好奇心':-0.6,'分析思维':-1.3,'概念思维':1.3,'创造思维':0,'适应性':0.0,'独立性':-1.3,'条理性':-0.9,'自律性':3.1,'可靠性':-2.1,'成就动机':0.5,'坚韧性':0.8,'主动性':-0.6,'关注细节':-0.3};
 
             ALL_TRAITS.forEach(trait => {
-                let raw = rawScoreMap[trait];
-                let max = maxRawMap[trait] || 0;
+                let raw = rawScoreMap[trait]; let max = maxRawMap[trait] || 0;
                 if (max === 0) { finalScoreMap[trait] = 5; return; }
-
-                let ratio = raw / max;
-                let deviation = ratio - baseline; 
-                let score = 5.5 + (deviation * 15.0) + (TRAIT_NORM_ADJUST[trait] || 0);
-                
-                score = Math.round(score);
+                let ratio = raw / max; let deviation = ratio - baseline; 
+                let score = Math.round(5.5 + (deviation * 15.0) + (TRAIT_NORM_ADJUST[trait] || 0));
                 finalScoreMap[trait] = Math.min(10, Math.max(1, score));
             });
         }
 
-        function getAvg(traits) { 
-            return traits.reduce((acc, t) => acc + finalScoreMap[t], 0) / traits.length; 
-        }
+        function getAvg(traits) { return traits.reduce((acc, t) => acc + finalScoreMap[t], 0) / traits.length; }
 
         function generateReport() {
             document.getElementById('view-quiz').classList.add('hidden');
             document.getElementById('view-result').classList.remove('hidden');
-            
             document.getElementById('report-user-sub').innerText = `${userInfo.name} · ${userInfo.dept} · ${userInfo.gender} · ${userInfo.age}岁 · ${userInfo.edu}`;
 
             let totalMinutes = Math.max(1, Math.round((Date.now() - testStartTime) / 60000));
@@ -629,57 +485,58 @@
             document.getElementById('report-stats').innerText = `作答时间: ${totalMinutes} 分钟 | 过快应答率: ${fastRate}%`;
             
             const validEl = document.getElementById('report-validity');
-            if (totalMinutes < 3 || parseFloat(fastRate) > 30.0) { 
-                validEl.innerText = "【报告无效：存在随机作答】"; 
-                validEl.className = "text-xs font-bold mt-1 text-red-600"; 
-            } else { 
-                validEl.innerText = "【报告有效】"; 
-                validEl.className = "text-xs font-bold mt-1 text-green-700"; 
-            }
+            if (totalMinutes < 3 || parseFloat(fastRate) > 30.0) { validEl.innerText = "【报告无效：存在随机作答】"; validEl.className = "text-xs font-bold mt-1 text-red-600"; } 
+            else { validEl.innerText = "【报告有效】"; validEl.className = "text-xs font-bold mt-1 text-green-700"; }
 
-            renderRadar(); 
-            renderTypicalTraits(); 
-            renderBarChart(); 
-            renderLeadership(); 
-            renderTeamRoles(); 
-            renderJobPref(); 
-            renderSuggestions(); 
-            renderDetailTable();
-            
+            renderRadar(); renderTypicalTraits(); renderBarChart(); renderLeadership(); renderTeamRoles(); renderJobPref(); renderSuggestions(); renderDetailTable();
             fitDesktopScreen();
         }
 
+        // ==========================================
+        // 核心修复 2：手机端报告尺寸自适应与绝对居中
+        // ==========================================
         function fitDesktopScreen() {
-            const wrapper = document.getElementById('report-wrapper'), screenW = window.innerWidth;
+            const wrapper = document.getElementById('report-wrapper');
+            const screenW = window.innerWidth;
+            
             if (screenW < 820) {
+                // 计算比例，边缘留 10px 间隙
                 const scale = (screenW - 20) / 794; 
+                // 关键修正：将缩放原点设为左上角
+                wrapper.style.transformOrigin = 'top left'; 
                 wrapper.style.transform = `scale(${scale})`;
+                
+                // 核心修复：手动计算剩余空间并赋予 Left Margin，实现绝对居中，杜绝右移
+                const centeredMargin = (screenW - (794 * scale)) / 2;
+                wrapper.style.marginLeft = `${centeredMargin}px`;
+
+                // 修正因 transform scale 导致的高度塌陷问题
                 setTimeout(() => { 
-                    const totalHeight = wrapper.offsetHeight; 
-                    wrapper.style.marginBottom = `-${totalHeight * (1 - scale)}px`; 
+                    const scaledHeight = wrapper.offsetHeight * scale;
+                    wrapper.style.marginBottom = `-${wrapper.offsetHeight - scaledHeight}px`; 
                 }, 100);
+            } else {
+                wrapper.style.transformOrigin = 'top center';
+                wrapper.style.transform = 'none';
+                wrapper.style.marginLeft = 'auto';
+                wrapper.style.marginRight = 'auto';
             }
         }
+        // 监听屏幕翻转或调整大小，动态修正居中
+        window.addEventListener('resize', () => {
+            if(!document.getElementById('view-result').classList.contains('hidden')){
+                fitDesktopScreen();
+            }
+        });
 
         function registerChart(domId, option) {
             const chart = echarts.init(document.getElementById(domId)); 
-            option.animation = false; 
-            chart.setOption(option); 
-            chartInstances.push(chart);
+            option.animation = false; chart.setOption(option); chartInstances.push(chart);
         }
 
         function renderRadar() {
-            const scores = [
-                getAvg(BIG_FIVE_MAP['尽责性']).toFixed(1), 
-                getAvg(BIG_FIVE_MAP['外倾性']).toFixed(1), 
-                getAvg(BIG_FIVE_MAP['亲和性']).toFixed(1), 
-                getAvg(BIG_FIVE_MAP['思维开放性']).toFixed(1), 
-                getAvg(BIG_FIVE_MAP['情绪稳定性']).toFixed(1)
-            ];
-            registerChart('radar-chart', {
-                radar: { indicator: [{ name: '尽责性', max: 10 }, { name: '外倾性', max: 10 }, { name: '亲和性', max: 10 }, { name: '思维开放性', max: 10 }, { name: '情绪稳定性', max: 10 }], radius: '60%', name: { textStyle: { color: '#000', fontWeight: 'bold', fontSize: 10 } } },
-                series: [{ type: 'radar', data: [{ value: scores, areaStyle: { color: 'rgba(29, 78, 216, 0.25)' }, lineStyle: { color: '#1D4ED8', width: 2 }, itemStyle: { color: '#1D4ED8' } }] }]
-            });
+            const scores = [getAvg(BIG_FIVE_MAP['尽责性']).toFixed(1), getAvg(BIG_FIVE_MAP['外倾性']).toFixed(1), getAvg(BIG_FIVE_MAP['亲和性']).toFixed(1), getAvg(BIG_FIVE_MAP['思维开放性']).toFixed(1), getAvg(BIG_FIVE_MAP['情绪稳定性']).toFixed(1)];
+            registerChart('radar-chart', { radar: { indicator: [{ name: '尽责性', max: 10 }, { name: '外倾性', max: 10 }, { name: '亲和性', max: 10 }, { name: '思维开放性', max: 10 }, { name: '情绪稳定性', max: 10 }], radius: '60%', name: { textStyle: { color: '#000', fontWeight: 'bold', fontSize: 10 } } }, series: [{ type: 'radar', data: [{ value: scores, areaStyle: { color: 'rgba(29, 78, 216, 0.25)' }, lineStyle: { color: '#1D4ED8', width: 2 }, itemStyle: { color: '#1D4ED8' } }] }] });
         }
 
         function renderTypicalTraits() {
@@ -691,85 +548,32 @@
             const otherTrait = ['主导支配', '影响性', '合作性', '同理心'].sort((a,b)=>finalScoreMap[b]-finalScoreMap[a])[0];
             const taskTrait = ['条理性', '可靠性', '主动性', '分析思维'].sort((a,b)=>finalScoreMap[b]-finalScoreMap[a])[0];
 
-            let html = `
-                <tr><td class="font-bold text-black border-l-4 border-blue-600">管理自我</td><td class="font-bold text-[15px] text-blue-700">${manageSelf.toFixed(1)}</td><td class="text-left text-[11px] text-gray-800"><b>${selfTrait}：</b>${TRAIT_DICT[selfTrait][finalScoreMap[selfTrait]>=5?'high':'low']}</td></tr>
-                <tr><td class="font-bold text-black border-l-4 border-green-600">管理他人</td><td class="font-bold text-[15px] text-green-700">${manageOthers.toFixed(1)}</td><td class="text-left text-[11px] text-gray-800"><b>${otherTrait}：</b>${TRAIT_DICT[otherTrait][finalScoreMap[otherTrait]>=5?'high':'low']}</td></tr>
-                <tr><td class="font-bold text-black border-l-4 border-purple-600">管理任务</td><td class="font-bold text-[15px] text-purple-700">${manageTasks.toFixed(1)}</td><td class="text-left text-[11px] text-gray-800"><b>${taskTrait}：</b>${TRAIT_DICT[taskTrait][finalScoreMap[taskTrait]>=5?'high':'low']}</td></tr>
-            `;
+            let html = `<tr><td class="font-bold text-black border-l-4 border-blue-600">管理自我</td><td class="font-bold text-[15px] text-blue-700">${manageSelf.toFixed(1)}</td><td class="text-left text-[11px] text-gray-800"><b>${selfTrait}：</b>${TRAIT_DICT[selfTrait][finalScoreMap[selfTrait]>=5?'high':'low']}</td></tr><tr><td class="font-bold text-black border-l-4 border-green-600">管理他人</td><td class="font-bold text-[15px] text-green-700">${manageOthers.toFixed(1)}</td><td class="text-left text-[11px] text-gray-800"><b>${otherTrait}：</b>${TRAIT_DICT[otherTrait][finalScoreMap[otherTrait]>=5?'high':'low']}</td></tr><tr><td class="font-bold text-black border-l-4 border-purple-600">管理任务</td><td class="font-bold text-[15px] text-purple-700">${manageTasks.toFixed(1)}</td><td class="text-left text-[11px] text-gray-800"><b>${taskTrait}：</b>${TRAIT_DICT[taskTrait][finalScoreMap[taskTrait]>=5?'high':'low']}</td></tr>`;
             document.getElementById('typical-traits-body').innerHTML = html;
         }
 
         function renderBarChart() {
             const scores = ALL_TRAITS.map(t => finalScoreMap[t].toFixed(0));
             const avgScore = (scores.reduce((a,b)=>parseFloat(a)+parseFloat(b),0)/25).toFixed(1);
-            registerChart('bar-chart', {
-                grid: { top: '15%', bottom: '25%', left: '3%', right: '3%', containLabel: true },
-                xAxis: { type: 'category', data: ALL_TRAITS, axisLabel: { interval: 0, rotate: 45, fontSize: 9, color: '#000' } }, 
-                yAxis: { type: 'value', max: 10, splitLine: { lineStyle: { type: 'dashed' } } },
-                series: [{ 
-                    data: scores, type: 'bar', barWidth: '60%', 
-                    label: { show: true, position: 'top', fontSize: 9, color: '#000', fontWeight: 'bold' }, 
-                    itemStyle: { color: (p) => { if(p.dataIndex < 4) return '#60A5FA'; if(p.dataIndex < 8) return '#F59E0B'; if(p.dataIndex < 12) return '#10B981'; if(p.dataIndex < 18) return '#A78BFA'; return '#9CA3AF'; } }, 
-                    markLine: { data: [{ yAxis: avgScore, name: '均分' }], lineStyle: { color: '#DC2626', type: 'solid' }, label: { show: false } } 
-                }]
-            });
+            registerChart('bar-chart', { grid: { top: '15%', bottom: '25%', left: '3%', right: '3%', containLabel: true }, xAxis: { type: 'category', data: ALL_TRAITS, axisLabel: { interval: 0, rotate: 45, fontSize: 9, color: '#000' } }, yAxis: { type: 'value', max: 10, splitLine: { lineStyle: { type: 'dashed' } } }, series: [{ data: scores, type: 'bar', barWidth: '60%', label: { show: true, position: 'top', fontSize: 9, color: '#000', fontWeight: 'bold' }, itemStyle: { color: (p) => { if(p.dataIndex < 4) return '#60A5FA'; if(p.dataIndex < 8) return '#F59E0B'; if(p.dataIndex < 12) return '#10B981'; if(p.dataIndex < 18) return '#A78BFA'; return '#9CA3AF'; } }, markLine: { data: [{ yAxis: avgScore, name: '均分' }], lineStyle: { color: '#DC2626', type: 'solid' }, label: { show: false } } }] });
         }
 
         function renderLeadership() {
             const baseIndex = (finalScoreMap['自信度'] * 0.15 + finalScoreMap['主导支配'] * 0.20 + finalScoreMap['影响性'] * 0.20 + finalScoreMap['独立性'] * 0.15 + finalScoreMap['坚韧性'] * 0.10 + finalScoreMap['成就动机'] * 0.10 + finalScoreMap['情绪控制'] * 0.10);
             const index = Math.min(10, Math.max(1, baseIndex - 0.6)).toFixed(1);
-            registerChart('gauge-chart', { 
-                series: [{ 
-                    type: 'gauge', startAngle: 180, endAngle: 0, min: 0, max: 10, 
-                    axisLine: { lineStyle: { width: 20, color: [[0.3, '#DBEAFE'], [0.7, '#60A5FA'], [1, '#1D4ED8']] } }, 
-                    pointer: { itemStyle: { color: '#000' }, width: 3 }, axisTick: { show: false }, splitLine: { show: false }, axisLabel: { show: false }, 
-                    detail: { offsetCenter: [0, '25%'], fontSize: 20, fontWeight: 'bold', formatter: '{value}', color: '#000' }, 
-                    data: [{ value: index }] 
-                }] 
-            });
+            registerChart('gauge-chart', { series: [{ type: 'gauge', startAngle: 180, endAngle: 0, min: 0, max: 10, axisLine: { lineStyle: { width: 20, color: [[0.3, '#DBEAFE'], [0.7, '#60A5FA'], [1, '#1D4ED8']] } }, pointer: { itemStyle: { color: '#000' }, width: 3 }, axisTick: { show: false }, splitLine: { show: false }, axisLabel: { show: false }, detail: { offsetCenter: [0, '25%'], fontSize: 20, fontWeight: 'bold', formatter: '{value}', color: '#000' }, data: [{ value: index }] }] });
         }
 
         function renderTeamRoles() {
-            const roles = [
-                { name: '智多星', val: Math.min(10, Math.max(1, getAvg(['创造思维', '好奇心', '独立性', '适应性']) + 2.25)) },
-                { name: '分析者', val: Math.min(10, Math.max(1, getAvg(['分析思维', '概念思维', '独立性', '情绪控制']) + 1.3)) },
-                { name: '指挥官', val: Math.min(10, Math.max(1, getAvg(['主导支配', '影响性', '活力性', '成就动机']) + 3.35)) },
-                { name: '执行者', val: Math.min(10, Math.max(1, getAvg(['可靠性', '条理性', '坚韧性', '自律性']) + 0.5)) },
-                { name: '探索者', val: Math.min(10, Math.max(1, getAvg(['乐群性', '活力性', '好奇心', '适应性']) - 1.35)) },
-                { name: '督促者', val: Math.min(10, Math.max(1, getAvg(['关注细节', '条理性', '可靠性', '自律性']) - 1.4)) },
-                { name: '协调者', val: Math.min(10, Math.max(1, getAvg(['合作性', '同理心', '谦虚性', '平和度', '利他性']) - 1.6)) },
-                { name: '外交家', val: Math.min(10, Math.max(1, getAvg(['合作性', '影响性', '乐群性', '同理心']) - 1.5)) }
-            ].sort((a,b) => b.val - a.val);
-
-            registerChart('role-bar-chart', { 
-                grid: { top: '15%', bottom: '20%', left: '5%', right: '5%' }, 
-                xAxis: { type: 'category', data: roles.map(r => r.name), axisLabel: { fontSize: 10, color: '#000' } }, 
-                yAxis: { show: false, max: 10 }, 
-                series: [{ data: roles.map(r => r.val.toFixed(1)), type: 'bar', barWidth: '45%', label: { show: true, position: 'top', color: '#1D4ED8', fontWeight: 'bold', fontSize: 10 }, itemStyle: { color: '#60A5FA' } }] 
-            });
+            const roles = [{ name: '智多星', val: Math.min(10, Math.max(1, getAvg(['创造思维', '好奇心', '独立性', '适应性']) + 2.25)) },{ name: '分析者', val: Math.min(10, Math.max(1, getAvg(['分析思维', '概念思维', '独立性', '情绪控制']) + 1.3)) },{ name: '指挥官', val: Math.min(10, Math.max(1, getAvg(['主导支配', '影响性', '活力性', '成就动机']) + 3.35)) },{ name: '执行者', val: Math.min(10, Math.max(1, getAvg(['可靠性', '条理性', '坚韧性', '自律性']) + 0.5)) },{ name: '探索者', val: Math.min(10, Math.max(1, getAvg(['乐群性', '活力性', '好奇心', '适应性']) - 1.35)) },{ name: '督促者', val: Math.min(10, Math.max(1, getAvg(['关注细节', '条理性', '可靠性', '自律性']) - 1.4)) },{ name: '协调者', val: Math.min(10, Math.max(1, getAvg(['合作性', '同理心', '谦虚性', '平和度', '利他性']) - 1.6)) },{ name: '外交家', val: Math.min(10, Math.max(1, getAvg(['合作性', '影响性', '乐群性', '同理心']) - 1.5)) }].sort((a,b) => b.val - a.val);
+            registerChart('role-bar-chart', { grid: { top: '15%', bottom: '20%', left: '5%', right: '5%' }, xAxis: { type: 'category', data: roles.map(r => r.name), axisLabel: { fontSize: 10, color: '#000' } }, yAxis: { show: false, max: 10 }, series: [{ data: roles.map(r => r.val.toFixed(1)), type: 'bar', barWidth: '45%', label: { show: true, position: 'top', color: '#1D4ED8', fontWeight: 'bold', fontSize: 10 }, itemStyle: { color: '#60A5FA' } }] });
         }
 
         function renderJobPref() {
-            const jobs = [
-                { cat: '创意类', ex: '设计/策划', val: Math.min(10, Math.max(1, getAvg(['创造思维', '适应性', '好奇心', '活力性']) + 3.0)) },
-                { cat: '研究类', ex: '研发/投资', val: Math.min(10, Math.max(1, getAvg(['分析思维', '概念思维', '好奇心', '独立性']) + 3.0)) },
-                { cat: '技术类', ex: '设备/维修', val: Math.min(10, Math.max(1, getAvg(['分析思维', '关注细节', '可靠性', '独立性']) - 1.25)) },
-                { cat: '服务类', ex: '客服/教师', val: Math.min(10, Math.max(1, getAvg(['同理心', '利他性', '合作性', '谦虚性']) - 0.75)) },
-                { cat: '职能类', ex: '财务/法务', val: Math.min(10, Math.max(1, getAvg(['条理性', '关注细节', '可靠性', '自律性']) - 1.1)) },
-                { cat: '影响类', ex: '管理/销售', val: Math.min(10, Math.max(1, getAvg(['影响性', '主导支配', '自信度', '乐群性']) - 1.35)) }
-            ].sort((a,b) => b.val - a.val);
-
+            const jobs = [{ cat: '创意类', ex: '设计/策划', val: Math.min(10, Math.max(1, getAvg(['创造思维', '适应性', '好奇心', '活力性']) + 3.0)) },{ cat: '研究类', ex: '研发/投资', val: Math.min(10, Math.max(1, getAvg(['分析思维', '概念思维', '好奇心', '独立性']) + 3.0)) },{ cat: '技术类', ex: '设备/维修', val: Math.min(10, Math.max(1, getAvg(['分析思维', '关注细节', '可靠性', '独立性']) - 1.25)) },{ cat: '服务类', ex: '客服/教师', val: Math.min(10, Math.max(1, getAvg(['同理心', '利他性', '合作性', '谦虚性']) - 0.75)) },{ cat: '职能类', ex: '财务/法务', val: Math.min(10, Math.max(1, getAvg(['条理性', '关注细节', '可靠性', '自律性']) - 1.1)) },{ cat: '影响类', ex: '管理/销售', val: Math.min(10, Math.max(1, getAvg(['影响性', '主导支配', '自信度', '乐群性']) - 1.35)) }].sort((a,b) => b.val - a.val);
             let thead = '<tr>'; let tbody1 = '<tr>'; let tbody2 = '<tr>'; let tbody3 = '<tr>';
-            jobs.forEach(j => {
-                let lvl = j.val > 7.5 ? '高匹配' : (j.val > 6 ? '中高匹配' : (j.val > 4.5 ? '中匹配' : '低匹配'));
-                thead += `<th class="py-1">${j.cat}</th>`; 
-                tbody1 += `<td class="text-[10px] text-gray-500 py-1">${j.ex}</td>`; 
-                tbody2 += `<td class="font-bold text-[11px] py-1 ${j.val > 6 ? 'text-blue-700' : 'text-gray-800'}">${lvl}</td>`; 
-                tbody3 += `<td class="font-bold text-xs py-1">${j.val.toFixed(1)}</td>`;
-            });
-            thead += '</tr>'; tbody1 += '</tr>'; tbody2 += '</tr>'; tbody3 += '</tr>';
-            document.getElementById('job-table-head').innerHTML = thead; 
-            document.getElementById('job-table-body').innerHTML = tbody1 + tbody2 + tbody3;
+            jobs.forEach(j => { let lvl = j.val > 7.5 ? '高匹配' : (j.val > 6 ? '中高匹配' : (j.val > 4.5 ? '中匹配' : '低匹配')); thead += `<th class="py-1">${j.cat}</th>`; tbody1 += `<td class="text-[10px] text-gray-500 py-1">${j.ex}</td>`; tbody2 += `<td class="font-bold text-[11px] py-1 ${j.val > 6 ? 'text-blue-700' : 'text-gray-800'}">${lvl}</td>`; tbody3 += `<td class="font-bold text-xs py-1">${j.val.toFixed(1)}</td>`; });
+            document.getElementById('job-table-head').innerHTML = thead + '</tr>'; document.getElementById('job-table-body').innerHTML = tbody1 + '</tr>' + tbody2 + '</tr>' + tbody3 + '</tr>';
         }
 
         function renderSuggestions() {
@@ -785,14 +589,8 @@
             Object.keys(BIG_FIVE_MAP).forEach(cat => {
                 let traits = BIG_FIVE_MAP[cat];
                 traits.forEach((t, index) => {
-                    let score = finalScoreMap[t].toFixed(0); 
-                    let isLow = score < 5;
-                    html += `<tr>
-                        ${index === 0 ? `<td rowspan="${traits.length}" class="font-bold bg-gray-100 text-black border-b border-gray-300 w-[8%]">${cat}</td>` : ''}
-                        <td class="text-right pr-4 text-gray-700 leading-snug py-0.5 ${isLow ? 'bg-orange-50 font-bold' : ''}">${TRAIT_DICT[t].low}</td>
-                        <td class="font-bold text-blue-900 bg-blue-50 leading-none py-1">${t}<br><span class="text-[10px]">${score}</span></td>
-                        <td class="text-left pl-4 text-gray-700 leading-snug py-0.5 ${!isLow ? 'bg-green-50 font-bold' : ''}">${TRAIT_DICT[t].high}</td>
-                    </tr>`;
+                    let score = finalScoreMap[t].toFixed(0); let isLow = score < 5;
+                    html += `<tr>${index === 0 ? `<td rowspan="${traits.length}" class="font-bold bg-gray-100 text-black border-b border-gray-300 w-[8%]">${cat}</td>` : ''}<td class="text-right pr-4 text-gray-700 leading-snug py-0.5 ${isLow ? 'bg-orange-50 font-bold' : ''}">${TRAIT_DICT[t].low}</td><td class="font-bold text-blue-900 bg-blue-50 leading-none py-1">${t}<br><span class="text-[10px]">${score}</span></td><td class="text-left pl-4 text-gray-700 leading-snug py-0.5 ${!isLow ? 'bg-green-50 font-bold' : ''}">${TRAIT_DICT[t].high}</td></tr>`;
                 });
             });
             document.getElementById('detail-table-body').innerHTML = html;
@@ -800,54 +598,29 @@
 
         async function exportPDF() {
             const btn = document.getElementById('export-btn'); 
-            btn.innerHTML = '⏳ 正在处理超清页面，请勿操作...'; 
-            btn.disabled = true;
-            
+            btn.innerHTML = '⏳ 正在处理超清页面，请勿操作...'; btn.disabled = true;
             const wrapper = document.getElementById('report-wrapper'), page1 = document.getElementById('pdf-page-1'), page2 = document.getElementById('pdf-page-2');
-            const originalTransform = wrapper.style.transform, originalMargin = wrapper.style.marginBottom;
+            const originalTransform = wrapper.style.transform, originalMargin = wrapper.style.marginBottom, originalOrigin = wrapper.style.transformOrigin, originalLeft = wrapper.style.marginLeft;
             
-            wrapper.style.transform = 'none'; 
-            wrapper.style.marginBottom = '0px'; 
-            wrapper.classList.add('exporting-mode'); 
-            window.scrollTo(0, 0);
+            wrapper.style.transform = 'none'; wrapper.style.marginBottom = '0px'; wrapper.style.marginLeft = '0px'; wrapper.classList.add('exporting-mode'); window.scrollTo(0, 0);
 
             const chartBackups = [];
-            chartInstances.forEach(chart => {
-                const dom = chart.getDom();
-                const imgData = chart.getDataURL({ pixelRatio: 2, backgroundColor: '#fff' });
-                const img = document.createElement('img');
-                img.src = imgData; img.style.width = '100%'; img.style.height = '100%';
-                chartBackups.push({ dom: dom, originalNodes: Array.from(dom.childNodes) });
-                dom.innerHTML = ''; dom.appendChild(img); 
-            });
+            chartInstances.forEach(chart => { const dom = chart.getDom(); const imgData = chart.getDataURL({ pixelRatio: 2, backgroundColor: '#fff' }); const img = document.createElement('img'); img.src = imgData; img.style.width = '100%'; img.style.height = '100%'; chartBackups.push({ dom: dom, originalNodes: Array.from(dom.childNodes) }); dom.innerHTML = ''; dom.appendChild(img); });
 
             await new Promise(r => setTimeout(r, 300)); 
 
             try {
                 const canvasOpt = { scale: 2, useCORS: true, backgroundColor: '#ffffff', width: 794, height: 1123, scrollY: 0, scrollX: 0 };
                 const { jsPDF } = window.jspdf; const pdf = new jsPDF('p', 'pt', 'a4'); 
-                
-                const canvas1 = await html2canvas(page1, canvasOpt); 
-                pdf.addImage(canvas1.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, 595.28, 841.89);
-                
-                pdf.addPage(); 
-                const canvas2 = await html2canvas(page2, canvasOpt); 
-                pdf.addImage(canvas2.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, 595.28, 841.89);
-                
+                const canvas1 = await html2canvas(page1, canvasOpt); pdf.addImage(canvas1.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, 595.28, 841.89);
+                pdf.addPage(); const canvas2 = await html2canvas(page2, canvasOpt); pdf.addImage(canvas2.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, 595.28, 841.89);
                 pdf.save(`伽奈维医疗_人才测评_${userInfo.dept}_${userInfo.name}.pdf`);
             } catch (error) { 
-                alert("生成 PDF 失败，请检查浏览器权限！"); 
+                showAlert("生成 PDF 失败，请检查浏览器权限！", "导出失败"); 
             } finally {
-                wrapper.classList.remove('exporting-mode'); 
-                wrapper.style.transform = originalTransform; 
-                wrapper.style.marginBottom = originalMargin;
-                
-                chartBackups.forEach(backup => { 
-                    backup.dom.innerHTML = ''; 
-                    backup.originalNodes.forEach(node => backup.dom.appendChild(node)); 
-                });
-                btn.innerHTML = '⬇️ 导出标准 A4 报告 (自动2页)'; 
-                btn.disabled = false;
+                wrapper.classList.remove('exporting-mode'); wrapper.style.transform = originalTransform; wrapper.style.marginBottom = originalMargin; wrapper.style.transformOrigin = originalOrigin; wrapper.style.marginLeft = originalLeft;
+                chartBackups.forEach(backup => { backup.dom.innerHTML = ''; backup.originalNodes.forEach(node => backup.dom.appendChild(node)); });
+                btn.innerHTML = '⬇️ 导出标准 A4 报告 (自动2页)'; btn.disabled = false;
             }
         }
     </script>
