@@ -16,7 +16,6 @@
     <meta itemprop="description" content="专业人才素质测评系统，基于行为科学建模。">
     <meta itemprop="image" content="https://cqhz52-byte.github.io/-/images/share-logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -87,10 +86,13 @@
                         <option value="大学专科">大学专科</option><option value="大学本科" selected>大学本科</option><option value="硕士研究生">硕士研究生</option><option value="博士及以上">博士及以上</option>
                     </select>
                 </div>
-                <button onclick="startTest()" class="w-full bg-blue-700 text-white p-3 rounded font-bold text-lg hover:bg-blue-800 mt-6 shadow transition-all">开始测评</button>
-                <button onclick="clearCache()" class="w-full text-gray-400 text-xs underline mt-2 hover:text-gray-600 transition-all">清除本地缓存</button>
+                <div>
+                    <label class="block text-sm font-bold text-blue-800 mb-1">测评邀请码 <span class="text-red-500">*</span></label>
+                    <input type="text" id="input-code" class="w-full border p-3 rounded outline-none border-blue-300 focus:border-blue-600 uppercase" placeholder="请输入HR发放的专属邀请码">
+                </div>
                 
-
+                <button id="btn-start" onclick="startTest()" class="w-full bg-blue-700 text-white p-3 rounded font-bold text-lg hover:bg-blue-800 mt-6 shadow transition-all">开始测评</button>
+                <button onclick="clearCache()" class="w-full text-gray-400 text-xs underline mt-2 hover:text-gray-600 transition-all">清除本地缓存</button>
             </div>
         </section>
 
@@ -351,7 +353,7 @@
         }
 
         // -------------------------
-        // 调试通道
+        // 调试通道 (通过快捷键调用)
         // -------------------------
         function quickDebug() {
             document.getElementById('input-name').value = "陈枭";
@@ -396,6 +398,66 @@
             generateReport();
         }
 
+        function quickDebugHuYingzhong() {
+            document.getElementById('input-name').value = "胡应中";
+            document.getElementById('input-age').value = "28";
+            document.getElementById('input-dept').value = "市场/销售部";
+            userInfo = { name: "胡应中", gender: "男", age: "28", dept: "市场/销售部", edu: "大学本科" };
+            
+            document.getElementById('user-info-display').innerText = `胡应中 | 市场/销售部`;
+            document.getElementById('user-info-display').classList.remove('hidden');
+            document.getElementById('view-intro').classList.add('hidden');
+            
+            testStartTime = Date.now() - (15 * 60000); 
+            fastAnswerCount = 2;
+            
+            ALL_TRAITS.forEach(trait => { rawScoreMap[trait] = 0; });
+            
+            const huAnswers = [
+                [0, 1], [0, 2], [1, 2], [0, 1], [0, 2], [0, 2], [2, 1], [0, 1], [0, 2], [0, 1],
+                [1, 0], [0, 2], [1, 2], [1, 0], [0, 1], [2, 0], [2, 1], [0, 1], [1, 0], [1, 2],
+                [0, 2], [2, 1], [1, 2], [1, 2], [2, 0], [0, 1], [2, 1], [2, 0], [1, 0], [2, 1],
+                [0, 2], [0, 2], [1, 2], [0, 2], [1, 0], [1, 0], [0, 2], [2, 0], [0, 1], [0, 1],
+                [2, 1], [0, 1], [2, 0], [1, 2], [1, 0], [2, 1], [2, 0], [1, 0], [2, 1], [1, 0],
+                [1, 0], [1, 2], [2, 1], [2, 0], [0, 1], [1, 0], [0, 1], [0, 2], [0, 2], [1, 0],
+                [2, 1], [1, 0], [2, 1], [2, 1], [0, 1], [1, 0], [2, 1]
+            ];
+
+            questionsData.forEach((q, index) => {
+                let mostIndex = huAnswers[index][0];
+                let nextIndex = huAnswers[index][1];
+                let leastIndex = [0, 1, 2].find(i => i !== mostIndex && i !== nextIndex);
+                let most = q.options[mostIndex], next = q.options[nextIndex], least = q.options[leastIndex];
+
+                [most, next, least].forEach((opt, i) => {
+                    let isNeg = checkNegative(opt.text);
+                    let rawVal = (i === 0) ? 2 : ((i === 1) ? 1 : 0);
+                    let finalVal = isNeg ? (2 - rawVal) : rawVal;
+                    if(rawScoreMap[opt.trait] !== undefined) rawScoreMap[opt.trait] += finalVal;
+                });
+            });
+            currentQIndex = 67; calculateFinalScores(); generateReport();
+        }
+
+        // ==========================================
+        // 隐藏的快捷键测试入口 (Alt+Q / Alt+W)
+        // ==========================================
+        document.addEventListener('keydown', function(event) {
+            if (event.altKey) {
+                const key = event.key.toLowerCase(); 
+                if (key === 'q') {
+                    event.preventDefault(); 
+                    console.log("🛠️ 触发快捷键 Alt+Q: 加载[陈枭]模拟数据...");
+                    if (typeof quickDebug === 'function') quickDebug();
+                } 
+                else if (key === 'w') {
+                    event.preventDefault(); 
+                    console.log("🛠️ 触发快捷键 Alt+W: 加载[胡应中]模拟数据...");
+                    if (typeof quickDebugHuYingzhong === 'function') quickDebugHuYingzhong();
+                }
+            }
+        });
+
         // -------------------------
         // 判定反向题
         // -------------------------
@@ -411,23 +473,51 @@
         }
 
         // -------------------------
-        // 作答流程
+        // 作答流程 (已接入阿里云鉴权)
         // -------------------------
-        function startTest() {
+        async function startTest() {
             const name = document.getElementById('input-name').value;
             const gender = document.getElementById('input-gender').value;
             const age = document.getElementById('input-age').value;
             const dept = document.getElementById('input-dept').value;
-            if(!name || !age) { alert('请填写完整个人信息'); return; }
-            
-            userInfo = { name, gender, age, dept, edu: document.getElementById('input-edu').value };
-            document.getElementById('user-info-display').innerText = `${name} | ${dept}`;
-            document.getElementById('user-info-display').classList.remove('hidden');
-            document.getElementById('view-intro').classList.add('hidden');
-            document.getElementById('view-quiz').classList.remove('hidden');
+            const code = document.getElementById('input-code').value.trim();
+            const btn = document.getElementById('btn-start');
 
-            testStartTime = Date.now(); lastClickTime = Date.now(); 
-            saveProgress(); renderQuestion();
+            if(!name || !age) { alert('请填写完整个人信息'); return; }
+            if(!code) { alert('请输入测评邀请码'); return; }
+
+            try {
+                btn.innerText = "⏳ 身份验证中...";
+                btn.disabled = true;
+
+                const ALIYUN_FC_URL = "https://verifycode-hcxjprlfxl.cn-hangzhou.fcapp.run";
+                const response = await fetch(ALIYUN_FC_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: name, code: code })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    userInfo = { name, gender, age, dept, edu: document.getElementById('input-edu').value };
+                    document.getElementById('user-info-display').innerText = `${name} | ${dept}`;
+                    document.getElementById('user-info-display').classList.remove('hidden');
+                    document.getElementById('view-intro').classList.add('hidden');
+                    document.getElementById('view-quiz').classList.remove('hidden');
+
+                    testStartTime = Date.now(); lastClickTime = Date.now(); 
+                    saveProgress(); renderQuestion();
+                } else {
+                    alert(result.message || "邀请码无效，请联系HR！");
+                    btn.innerText = "开始测评";
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                alert("鉴权服务器连接失败，请检查网络或公网地址设置");
+                btn.innerText = "开始测评";
+                btn.disabled = false;
+            }
         }
 
         function renderQuestion(isRestore = false) {
@@ -703,35 +793,7 @@
             });
             document.getElementById('detail-table-body').innerHTML = html;
         }
-// ==========================================
-// 隐藏的快捷键测试入口 (Alt+Q / Alt+W)
-// ==========================================
-document.addEventListener('keydown', function(event) {
-    // 确保同时按下了 Alt 键
-    if (event.altKey) {
-        // 将按键转为小写，兼容开启大写锁定(Caps Lock)的情况
-        const key = event.key.toLowerCase(); 
 
-        if (key === 'q') {
-            event.preventDefault(); // 阻止浏览器可能的默认快捷键行为
-            console.log("🛠️ 触发快捷键 Alt+Q: 加载[陈枭]模拟数据...");
-            
-            // 确保函数存在再执行
-            if (typeof quickDebug === 'function') {
-                quickDebug();
-            }
-        } 
-        else if (key === 'w') {
-            event.preventDefault(); // 阻止浏览器可能的默认快捷键行为
-            console.log("🛠️ 触发快捷键 Alt+W: 加载[胡应中]模拟数据...");
-            
-            // 确保函数存在再执行
-            if (typeof quickDebugHuYingzhong === 'function') {
-                quickDebugHuYingzhong();
-            }
-        }
-    }
-});
         async function exportPDF() {
             const btn = document.getElementById('export-btn'); 
             btn.innerHTML = '⏳ 正在处理超清页面，请勿操作...'; 
